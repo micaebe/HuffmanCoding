@@ -2,6 +2,8 @@
 #define HUFFMANCODING_HUFFBINTREE_H
 
 
+#include <string>
+
 class HuffBinTree {
 private:
 
@@ -10,6 +12,8 @@ private:
         virtual ~HuffNode();
 
         virtual bool isLeaf();
+
+        virtual int getCount();
     };
 
     class Node : public HuffNode {
@@ -21,11 +25,13 @@ private:
         const int cnt;
 
     public:
-        Node(Node *, Node *, int);
+        Node(HuffNode*, HuffNode*, int);
 
         ~Node() override;
 
         bool isLeaf() override;
+
+        int getCount() override;
     };
 
     class Leaf : public HuffNode {
@@ -41,14 +47,24 @@ private:
         ~Leaf() override;
 
         bool isLeaf() override;
+
+        int getCount() override;
+    };
+
+    struct Compare {
+    public:
+        bool operator() (HuffNode*, HuffNode*);
     };
 
     Node *root = nullptr;
+    std::map<char, std::basic_string<char>> codebook; // build probably only temporarely
 
 public:
     ~HuffBinTree();
 
     bool isEmpty();
+
+    void buildTree(std::basic_string<char>);
 
 };
 
