@@ -1,0 +1,5 @@
+file(GLOB SRCS *.cpp)
+add_executable(testHuffBinTree testHuffBinTree.cpp main.cpp ../tree/HuffBinTree.h ../tree/HuffBinTree.cpp)
+target_link_libraries(testHuffBinTree gtest gmock)
+include_directories("..")
+install(TARGETS testHuffBinTree DESTINATION bin)
