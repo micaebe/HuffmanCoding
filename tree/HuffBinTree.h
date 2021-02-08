@@ -32,6 +32,8 @@ private:
         bool isLeaf() override;
 
         int getCount() override;
+
+        void generateCB(const std::basic_string<char>&, std::map<char, std::basic_string<char>>*);
     };
 
     class Leaf : public HuffNode {
@@ -57,15 +59,17 @@ private:
     };
 
     Node *root = nullptr;
-    std::map<char, std::basic_string<char>> codebook; // build probably only temporarely
+
+    std::map<char, std::basic_string<char>>* generateCB();
 
 public:
     ~HuffBinTree();
 
     bool isEmpty();
 
-    void buildTree(std::basic_string<char>);
+    void buildTree(const std::basic_string<char>&);
 
+    std::basic_string<char> encode(const std::basic_string<char>&);
 };
 
 

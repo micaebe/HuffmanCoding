@@ -4,6 +4,7 @@
 
 #include <map>
 #include <queue>
+#include <iostream>
 #include "HuffBinTree.h"
 
 
@@ -36,6 +37,26 @@ int HuffBinTree::Node::getCount() {
     return cnt;
 }
 
+void HuffBinTree::Node::generateCB(const std::basic_string<char>& code, std::map<char, std::basic_string<char>>* codebook) {
+    auto left_code = code;
+    auto right_code = code;
+    if (l && !l->isLeaf()) {
+        left_code.append("1");
+        ((Node*)l)->generateCB(left_code, codebook);
+    } else if (l) {
+        left_code.append("1");
+        codebook->insert({((Leaf*)l)->val, left_code});
+    }
+    if (r && !r->isLeaf()) {
+        right_code.append("0");
+        ((Node*)r)->generateCB(right_code, codebook);
+    } else if (r) {
+        right_code.append("0");
+        codebook->insert({((Leaf*)r)->val, right_code});
+        return;
+    }
+}
+
 
 /********************************************************************
  * Leaf (Subclass)
@@ -62,7 +83,7 @@ bool HuffBinTree::isEmpty() {
     return root == nullptr;
 }
 
-void HuffBinTree::buildTree(std::basic_string<char> toEncode) {
+void HuffBinTree::buildTree(const std::basic_string<char>& toEncode) {
     if (root != nullptr) {
         return;
     }
@@ -103,6 +124,32 @@ void HuffBinTree::buildTree(std::basic_string<char> toEncode) {
     root = (Node*)pq.top();
 }
 
+std::map<char, std::basic_string<char>>* HuffBinTree::generateCB() {
+    auto codebook = new std::map<char, std::basic_string<char>>();
+    this->root->generateCB("", codebook);
+    return codebook;
+}
+
+std::basic_string<char> HuffBinTree::encode(const std::basic_string<char>& toEncode) {
+    auto codebook = this->generateCB();
+    std::basic_string<char> encoded;
+    for (int i = 0; i < (int)toEncode.size(); ++i) {
+        auto it = codebook->find(toEncode[i]);
+        if (it != codebook->end()) {
+            encoded.append(it->second);
+        } else {
+            std::cout << "No representation for: " << toEncode[i] << std::endl;
+            break;
+        }
+    }
+    delete codebook;
+    return encoded;
+}
+
+
+/********************************************************************
+ * Huffman Binary Tree Comparator
+ *******************************************************************/
 bool HuffBinTree::Compare::operator()(HuffBinTree::HuffNode* h1, HuffBinTree::HuffNode* h2) {
     return h1->getCount() > h2->getCount();
 }
