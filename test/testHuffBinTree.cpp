@@ -21,5 +21,14 @@ TEST(BasicTest, EncodeBasic) {
     EXPECT_TRUE(encoded.size() < bitSize);
 }
 
+TEST(BasicTest, EncodeDecode) {
+    HuffBinTree tree;
+    std::basic_string<char> toEncode = "testphrase";
+    tree.buildTree(toEncode);
+    std::basic_string<char> encoded = tree.encode(toEncode);
+    std::basic_string<char> decoded = tree.decode(encoded);
+    EXPECT_EQ(toEncode, decoded);
+}
+
 
 

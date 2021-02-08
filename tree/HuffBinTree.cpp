@@ -57,6 +57,24 @@ void HuffBinTree::Node::generateCB(const std::basic_string<char>& code, std::map
     }
 }
 
+void HuffBinTree::Node::decode(std::basic_string<char>& toDecode, std::basic_string<char>& decoded) {
+    if (toDecode[0] == '1') {
+        toDecode.erase(0, 1);
+        if (l->isLeaf()) {
+            decoded.push_back(((Leaf*)l)->val);
+            return;
+        }
+        ((Node*)l)->decode(toDecode, decoded);
+    } else {
+        toDecode.erase(0, 1);
+        if (r->isLeaf()) {
+            decoded.push_back(((Leaf*)r)->val);
+            return;
+        }
+        ((Node*)r)->decode(toDecode, decoded);
+    }
+}
+
 
 /********************************************************************
  * Leaf (Subclass)
@@ -144,6 +162,14 @@ std::basic_string<char> HuffBinTree::encode(const std::basic_string<char>& toEnc
     }
     delete codebook;
     return encoded;
+}
+
+std::basic_string<char> HuffBinTree::decode(std::basic_string<char> toDecode) {
+    std::basic_string<char> decoded;
+    while (!toDecode.empty()) {
+        root->decode(toDecode, decoded);
+    }
+    return decoded;
 }
 
 

@@ -34,6 +34,8 @@ private:
         int getCount() override;
 
         void generateCB(const std::basic_string<char>&, std::map<char, std::basic_string<char>>*);
+
+        void decode(std::basic_string<char>&, std::basic_string<char>&);
     };
 
     class Leaf : public HuffNode {
@@ -70,6 +72,8 @@ public:
     void buildTree(const std::basic_string<char>&);
 
     std::basic_string<char> encode(const std::basic_string<char>&);
+
+    std::basic_string<char> decode(std::basic_string<char>);
 };
 
 
