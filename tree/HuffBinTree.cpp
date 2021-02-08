@@ -27,7 +27,10 @@ int HuffBinTree::HuffNode::getCount() {
  *******************************************************************/
 HuffBinTree::Node::Node(HuffBinTree::HuffNode *left, HuffBinTree::HuffNode *right, int count): l(left), r(right), cnt(count) { }
 
-HuffBinTree::Node::~Node() { }
+HuffBinTree::Node::~Node() {
+    delete l;
+    delete r;
+}
 
 bool HuffBinTree::Node::isLeaf() {
     return false;
@@ -81,7 +84,7 @@ void HuffBinTree::Node::decode(std::basic_string<char>& toDecode, std::basic_str
  *******************************************************************/
 HuffBinTree::Leaf::Leaf(char value, int count) : val(value), cnt(count) { }
 
-HuffBinTree::Leaf::~Leaf() { }
+HuffBinTree::Leaf::~Leaf() = default;
 
 bool HuffBinTree::Leaf::isLeaf() {
     return true;
@@ -95,7 +98,9 @@ int HuffBinTree::Leaf::getCount() {
 /********************************************************************
  * Huffman Binary Tree
  *******************************************************************/
-HuffBinTree::~HuffBinTree() = default;
+HuffBinTree::~HuffBinTree() {
+    delete root;
+};
 
 bool HuffBinTree::isEmpty() {
     return root == nullptr;
